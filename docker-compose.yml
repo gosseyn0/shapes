@@ -19,7 +19,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - mysqldb
-    command: ["./wait-for-it.sh", "mysqldb:3306", "--", "java", "-jar", "app.jar"]
+    command: ["./wait-for-it.sh", "--timeout=60", "mysqldb:3306", "--", "java", "-jar", "app.jar"]
     ports:
       - 8080:8080
     volumes:
