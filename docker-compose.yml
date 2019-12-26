@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  mysqldb:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=shapes_db
+    volumes:
+      - /data/mysql
+    networks:
+      - shapes-mysql
+  shapes-app:
+    image: spring-boot-jpa-image
+    networks:
+      - shapes-mysql
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    depends_on:
+      - mysqldb
+    command: ["./wait-for-it.sh", "mysqldb:3306", "--", "java", "-jar", "app.jar"]
+    ports:
+      - 8080:8080
+    volumes:
+      - /data/shapes-service
+networks:
+    shapes-mysql:
